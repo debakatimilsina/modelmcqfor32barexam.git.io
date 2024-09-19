@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Mock Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .timer {
+            font-size: 60px;
+            color: red;
+            position: fixed;
+            top: 80px;
+            right: 20px;
+        }
+
+        .progress-bar {
+            height: 5px;
+        }
+
+        .result {
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Hidden by default */
+        input[type="radio"] {
+            accent-color: blue;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        /* Remove bullets from options */
+        .explanation {
+            display: none;
+            font-style: italic;
+            color: gray;
+        }
+
+        .read-more-link {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+            display: none;
+        }
+
+        #passkeySections {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #answerPasskeySection {
+            display: none;
+            /* Initially hidden */
+            justify-content: flex-end;
+        }
+
+        #answerPasskeyInput {
+            width: 25%;
+        }
+
+        @media print {
+            body {
+                display: none;
+            }
+        }
+
+        /* Disable text selection and copying */
+        body {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+        }
+
+        /* Bold MCQ questions on the answer page */
+        .bold-question {
+            font-weight: bold;
+        }
+
+        h6 {
+            font-size: 24px;
+            color: #ff1493;
+            /* Hot Pink Color */
+            font-weight: bold;
+            text-shadow: 2px 2px 5px #ff69b4, -2px -2px 5px #ffffff;
+            /* Adds a glowing effect */
+            animation: blink 1s infinite;
+            /* Creates blinking effect */
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            /* Makes text all uppercase */
+        }
+
+        /* Blinking animation */
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="container">
+
+    <h1> Model Question for 32nd Advocate License Exam</h1>
+    <h6>Prepared by NajirNijunja Team</h6>
+
+    <!-- Single Passkey Input -->
+    <div id="passkeySections">
+        <!-- MCQ Passkey Input Section -->
+        <div class="input-group" id="questionPasskeySection">
+            <input type="text" class="form-control w-50" id="passkeyInput" maxlength="4" placeholder="Enter 4-digit passkey">
+            <button class="btn btn-success ms-2" id="passkeyButton" onclick="togglePasskeyMode()">Go To MCQs</button>
+        </div>
+
+        <!-- Answer Passkey Input Section (Initially hidden) -->
+        <div class="input-group" id="answerPasskeySection">
+            <input type="text" class="form-control" id="answerPasskeyInput" maxlength="4" placeholder="Enter 4-digit answer passkey">
+            <button class="btn btn-warning ms-2" onclick="submitAnswerPasskey()">See Answer</button>
+        </div>
+    </div>
+
+    <!-- Progress bars -->
+    <div class="progress mb-2">
+        <div class="progress-bar bg-success" id="timeProgress" style="width: 0%;"></div>
+    </div>
+    <div class="progress mb-2">
+        <div class="progress-bar bg-warning" id="answerProgress" style="width: 0%;"></div>
+    </div>
+
+    <!-- Timer -->
+    <p class="timer" id="timer"><span id="time">00:00</span></p>
+
+    <!-- Quiz form -->
+    <form id="quizForm" class="d-none">
+        <div id="questionsContainer"></div>
+        <button type="button" class="btn btn-primary mt-3" id="submitQuizBtn" onclick="checkUnansweredQuestions()">Submit</button>
+    </form>
+
+    <!-- Result -->
+    <div id="result"></div>
+
+    <script>
+        let isQuestionSubmitted = false; // Track if the question passkey has been submitted
+        let answersSubmitted = false; // Track if the answers are displayed after passkey verification
+        let currentMode = "question"; // Toggle between 'question' and 'answer' passkey modes
+        let currentExplanation = null; // Track currently open explanation for auto-close
+
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Disable right-click
+
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && ['p', 's', 'u'].includes(event.key)) { // Disable print, save, and view source
+                alert("This action is not allowed.");
+                event.preventDefault();
+            }
+        });
+
+        const questions = [
+            // Add questions array here...
+            {
+    question: "नेपालको नागरिक आमाबाट नेपालमा जन्म भई नेपालमा नै बसोबास गरेको व्यक्तिको बाबु विदेशी नागरिक भएमा त्यस्तो व्यक्तिले कुन प्रकारको नागरिकता पाउँदछ?",
+    options: ["वंशज", "अंगिकृत", "जन्मसिद्ध", "कुनै पनि प्रकारको नागरिकता पाउदैन"],
+    correctAnswer: "b",
+    explanation: "नेपालको कानुन अनुसार बाबु विदेशी भएमा वंशजको नागरिकता पाइँदैन। जन्मसिद्ध नागरिकता प्राप्तिको लागि संवैधानिक व्यवस्था छैन।"
+},
+{
+    question: "तलका मध्ये कुन मौलिक हक नेपाली नागरिकका लागि मात्र प्रत्याभूत गरिएको होइन।",
+    options: ["समानताको हक", "सूचनाको हक", "न्याय सम्बन्धी हक", "सम्पतिको हक"],
+    correctAnswer: "c",
+    explanation: "न्याय सम्बन्धी हक विदेशी नागरिकले पनि प्रयोग गर्न पाउँछन्।"
+},
+{
+    question: "तलका मध्ये कुन तरिकाबाट राष्ट्रपति उपरको महाअभियोगको प्रस्ताव पारित भएमा राष्ट्रपति पदमुक्त हुने व्यवस्था छ।",
+    options: [
+        "प्रतिनिधि सभाको तत्काल कायम रहेको सम्पूर्ण सदस्य संख्याको दुई तिहाई बहुमतले महाअभियोगको प्रस्ताव पारित गरेमा",
+        "संसदका दुवै सदनको तत्काल कायम रहेको सम्पूर्ण सदस्य संख्याको दुई तिहाई बहुमतले महाअभियोगको प्रस्ताव पारित गरेमा",
+        "प्रतिनिधि सभाको सम्पूर्ण सदस्य संख्याको दुई तिहाई बहुमतले महाअभियोगको प्रस्ताव पारित गरेमा",
+        "संसदका दुवै सदनको सम्पूर्ण सदस्य संख्याको दुई तिहाई बहुमतले महाअभियोगको प्रस्ताव पारित गरेमा"
+    ],
+    correctAnswer: "b",
+    explanation: "हेर्नुहोस् संविधानको धारा १०१(१)।"
+},
+{
+    question: "तलका मध्ये कुन बाक्य सही छैन।",
+    options: [
+        "कुनै पनि विधेयक प्रमाणीकरणका लागि पठाउँदा त्यस्तो विधेयक उत्पत्ति भएको सदनको सभामुख वा अध्यक्षले प्रमाणित गरी पठाउनु पर्छ",
+        "अर्थ विधेयक प्रमाणीकरणका लागि पठाउँदा सभामुखले प्रमाणित गरी पठाउनु पर्छ",
+        "अर्थ विधेयक बाहेकका कुनै विधेयक राष्ट्रपतिले आफूसमक्ष पेश भएको पन्ध्र दिन भित्र पुनर्विचारका लागि सम्बन्धित सदनमा फिर्ता पठाउन सक्छ",
+        "प्रधानमन्त्रीको सिफारिसमा राष्ट्रपतिले अध्यादेश जारी गर्न सक्नेछ"
+    ],
+    correctAnswer: "d",
+    explanation: "हेर्नुहोस् नेपालको संविधानको धारा ११४(१)।"
+},
+{
+    question: "तलका मध्ये कुन विवाद सर्वोच्च अदालतको संवैधानिक इजलासले हेर्दैन।",
+    options: [
+        "प्रदेश सभाका सदस्यको अयोग्यतासम्बन्धी विवाद",
+        "स्थानीय तहका पदाधिकारीको अयोग्यतासम्बन्धी विवाद",
+        "संविधानसँग कानून बाझिएको भन्ने विवाद",
+        "संघ प्रदेश र स्थानीय तहका बीचको अधिकारक्षेत्र सम्बन्धी विवाद"
+    ],
+    correctAnswer: "b",
+    explanation: "हेर्नुहोस् संवैधानिक इजलासको क्षेत्राधिकार, धारा १३७ को उपधारा २ को (ख)।"
+},
+{
+    question: "तलका मध्ये कुन पदाधिकारीको संसदीय सुनुवाई गर्नु पर्दैन।",
+    options: ["राजदूत", "प्रधान न्यायाधीश", "संवैधानिक निकायका प्रमुख", "राष्ट्रिय योजना आयोगका उपाध्यक्ष"],
+    correctAnswer: "d",
+    explanation: "हेर्नुहोस् नेपालको संविधानको धारा २९२।"
+},
+{
+    question: "तलका मध्ये कुन निकाय संवैधानिक निकाय होइन।",
+    options: ["महान्यायाधिवक्ता", "राष्ट्रिय प्राकृतिक स्रोत तथा वित्त आयोग", "मधेशी आयोग", "लोक सेवा आयोग"],
+    correctAnswer: "a",
+    explanation: "हेर्नुहोस् नेपालको संविधनाको धारा ३०६(१)(ठ)।"
+},
+{
+    question: "तलका मध्ये कुन वाक्य सही छ।",
+    options: [
+        "प्रदेश मन्त्रीले मुख्य मन्त्री समक्ष सपथ गर्नु पर्दछ",
+        "सर्वोच्च अदालतका न्यायाधीशले राष्ट्रपति समक्ष सपथ ग्रहण गर्नु पर्दछ",
+        "प्रदेशका राज्यमन्त्री र सहायक मन्त्रीले मुख्यमन्त्री समक्ष सपथ गर्नु पर्दछ",
+        "संघीय मन्त्रीले प्रधानमन्त्री समक्ष सपथ गर्नु पर्दछ"
+    ],
+    correctAnswer: "c",
+    explanation: "सर्वोच्च अदालतको न्यायाधीशले राष्ट्रपतिको उपस्थितिमा प्रधानन्यायाधीश समक्ष  सपथ लिनु पर्दछ भने प्रधानन्यायाधीशले राष्ट्रपतिसमक्ष सपथ लिनु पर्दछ। (हेर्नुहोस् सर्वोच्च अदालत ऐन, २०४८ को दफा ८) <br> त्यस्तै संघीय मन्त्रीले राष्ट्रपतिसमक्ष सपथ लिनुपर्दछ भने राज्य मन्त्री र  सहायक मन्त्रिले प्रधानमन्त्रीसमक्ष सपथ लिनुपर्दछ। (हेर्नुहोस् संविधानको धारा ८०। ) <br> त्यस्तै गरी प्रदेश मन्त्रीले प्रदेश प्रमुख समक्ष सपथ लिनुपर्दछ भने प्रदेशका राज्यमन्त्री र सहायक मन्त्रीले मुख्यमन्त्री समक्ष सपथ लिनुपर्दछ। (हेर्नुहोस् संविधानको धारा १७२)"
+},
+{
+    question: "कुन विषयमा रिट क्षेत्राधिकार आकर्षित हुदैन।",
+    options: ["मन्त्रिपरिषद्ले गरेको निर्णयमा", "न्याय परिषदले गरेको निर्णयमा", "प्रशासकीय निर्णयमा", "राजनीतिक प्रश्नमा"],
+    correctAnswer: "d",
+    explanation: "Doctrine of Political Question को सिद्धान्त अनुसार अदालतले राजनीति प्रश्नमा निर्णय दिन मिल्दैन।"
+},
+{
+    question: "उच्च अदालतले रिटमा गरेको अन्तिम आदेश उपर थप उपचारका लागि के उपाय अवलम्बन गर्न सकिन्छ।",
+    options: [
+        "सर्वोच्च अदालतमा पुनरावलोकनको निवेदन दिन सकिन्छ",
+        "सर्वोच्च अदालतमा दो.पा को निवेदन दिन सकिन्छ",
+        "सोही अदालतमा पुनरावलोकनको निवेदन दिन सकिन्छ",
+        "सर्वोच्च अदालतमा पुनरावेदन दिन सकिन्छ"
+    ],
+    correctAnswer: "b",
+    explanation: "उच्च अदालतले रिटमा गरेको अन्तिम आदेश उपर सर्वोच्च अदालतमा पुनरावेदन नलाग्ने तर दो.पा.को निवेदन दिन सकिने भनी सिद्धान्त प्रतिपादन भएको छ। <a href=\'https://supremecourt.gov.np/web/assets/downloads/aadesa_20731109.pdf\' target=\'_blank\'>see here</a>"
+},
+{
+    question: "कानूनको न्यायिक पुनरावलोकन भित्र तलको कुन विषय पर्दैन।",
+    options: [
+        "विधायिकी कानून उपरको न्यायिक पुनरावलोकन",
+        "संविधान संशोधन उपरको न्यायिक पुनरावलोकन",
+        "अध्यादेश उपरको न्यायिक पुनरावलोकन",
+        "सबै पर्दछन्"
+    ],
+    correctAnswer: "d",
+    explanation: "नेपालमा संसदमा विचाराधिन रहेको विधेयक (Bill) को न्यायिक पुनरावलोकन हुँदैन तर कानून र कानून सरहका दस्तावेजको न्यायिक पुनरावलोकन हुन्छ।"
+},
+{
+    question: "Nullum crimen sine lege भन्ने उक्तिले के जनाउँदछ?",
+    options: [
+        "फौजदारी कारवाहीमा सुनुवाईको मौका दिनु पर्दछ",
+        "जसले अपराध गरेको छ त्यसलाई मात्र सजायँ गर्नु पर्दछ",
+        "प्रमाण विना कसैलाई पनि फौजदरी मुद्दमा दोषी ठहर गर्न हुँदैन",
+        "कानूनले अपराध घोषित नगरेको कुरामा सजायँ गर्नु हुँदैन"
+    ],
+    correctAnswer: "d",
+    explanation: "Nullum=No, Crimen=Crime, Sine=Without, lege=law Therefore, the phrase indicates No Crime without Law."
+},
+{
+    question: "जन्मकैदको सजायँ पाएको व्यक्तिले कति अवधि कारागारमा व्यतिति गर्नु पर्दछ?",
+    options: ["पच्चीस वर्ष", "चालिस वर्ष", "जीवनभार", "बीस वर्ष"],
+    correctAnswer: "a",
+    explanation: "हेर्नुहोस् मु.अ.स., २०७४ को दफा ४२।"
+},
+{
+    question: "मुलुकी अपराध संहिता, २०७४ मा देहायका कुन कार्यलाई अपराधीकरण गरिएको छ?",
+    options: ["युद्ध अपराध", "जाती हत्या", "मानवता विरुद्धको अपराध", "सबै पर्दछन्"],
+    correctAnswer: "b",
+    explanation: "हेर्नुहोस् मु.अ.सं, २०७४ को दफा ५२।"
+}
+
+        ];
+        // Function to shuffle questions without shuffling options
+        function shuffleQuestions(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        let totalQuestions = questions.length,
+            timeLeft = totalQuestions * 45,
+            interval;
+
+        // Timer function
+        function startTimer() {
+            interval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    document.getElementById("result").innerHTML = "Time's up!";
+                    submitQuiz();
+                } else {
+                    const minutes = Math.floor(timeLeft / 60),
+                        seconds = timeLeft % 60;
+                    document.getElementById("time").innerHTML = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    document.getElementById("timeProgress").style.width = `${(totalQuestions * 45 - timeLeft) / (totalQuestions * 45) * 100}%`;
+                }
+                timeLeft -= 1;
+            }, 1000);
+        }
+
+        // Toggle between submit question and answer passkey modes
+        function togglePasskeyMode() {
+            const enteredKey = document.getElementById('passkeyInput').value;
+            document.getElementById('passkeyInput').value = ''; // Clear input field after each submission
+
+            if (currentMode === "question") {
+                // Checking the question passkey
+                if (enteredKey === '1111') {
+                    document.getElementById('quizForm').classList.remove('d-none');
+                    document.getElementById('timer').classList.remove('d-none');
+                    startTimer();
+                    isQuestionSubmitted = true; // Mark that the question passkey was submitted
+                    currentMode = "answer"; // Toggle mode to 'answer'
+                    document.getElementById('questionPasskeySection').style.display = 'none'; // Hide question passkey section
+                } else {
+                    alert('Incorrect question passkey');
+                }
+            }
+        }
+
+        // Submit answer passkey
+        function submitAnswerPasskey() {
+            const enteredKey = document.getElementById('answerPasskeyInput').value;
+            document.getElementById('answerPasskeyInput').value = ''; // Clear input field after each submission
+
+            if (enteredKey === '0000') {
+                document.getElementById('result').style.display = 'block'; // Show result after correct answer passkey
+                document.getElementById('answerPasskeySection').style.display = 'none'; // Hide answer passkey section
+                displayAnswers(); // Show answers
+
+                // Hide submit button after answers are displayed
+                document.getElementById('submitQuizBtn').style.display = 'none';
+            } else {
+                alert('Incorrect answer passkey');
+            }
+        }
+
+        // Display questions
+        function displayQuestions() {
+            let questionsContainer = document.getElementById('questionsContainer');
+            const optionLetters = ['a', 'b', 'c', 'd']; // Alphabet for options
+
+            questions.forEach((q, i) => {
+                let optionsHTML = q.options.map((o, index) => `<li><input type="radio" name="q${i + 1}" value="${optionLetters[index]}" onclick="markSelected(this)"> ${optionLetters[index]}. ${o}</li>`).join('');
+                questionsContainer.innerHTML += `
+                    <div>
+                        <p id="question${i + 1}">${i + 1}. ${q.question}</p>
+                        <ul>${optionsHTML}</ul>
+                        <span class="read-more-link" id="readMore${i + 1}" onclick="toggleExplanation(${i + 1})">Read More</span>
+                        <p class="explanation" id="explanation${i + 1}">${q.explanation}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Toggle explanation visibility and close previous
+        function toggleExplanation(index) {
+            if (currentExplanation && currentExplanation !== index) {
+                document.getElementById('explanation' + currentExplanation).style.display = 'none';
+            }
+            const explanation = document.getElementById('explanation' + index);
+            explanation.style.display = (explanation.style.display === 'block') ? 'none' : 'block';
+            currentExplanation = index;
+        }
+
+        // Mark selected answers
+        function markSelected(option) {
+            const allOptions = document.getElementsByName(option.name);
+            allOptions.forEach(el => el.parentElement.style.color = '');
+            option.parentElement.style.color = 'blue';
+            const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
+            document.getElementById('answerProgress').style.width = `${(answeredCount / totalQuestions) * 100}%`;
+        }
+
+        // Submit quiz
+        function submitQuiz() {
+            clearInterval(interval); // Stop timer
+            document.getElementById('timer').classList.add('d-none'); // Hide timer after submission
+
+            // Hide answers and explanations
+            for (let i = 1; i <= totalQuestions; i++) {
+                document.getElementById('readMore' + i).style.display = 'none';
+            }
+
+            document.getElementById('submitQuizBtn').style.display = 'none'; // Hide the submit button after quiz submission
+
+            // Disable all radio buttons after submission
+            const allRadioButtons = document.querySelectorAll('input[type="radio"]');
+            allRadioButtons.forEach(button => button.disabled = true);
+
+            // Show the answer passkey section after submission
+            document.getElementById('answerPasskeySection').style.display = 'flex';
+        }
+
+        // Display the correct answers
+        function displayAnswers() {
+            let score = 0;
+            for (let i = 1; i <= totalQuestions; i++) {
+                let selectedAnswer = document.querySelector(`input[name="q${i}"]:checked`)?.value;
+                let correctAnswer = questions[i - 1].correctAnswer;
+                document.querySelectorAll(`input[name="q${i}"]`).forEach(option => {
+                    // Make correct answers green and bold
+                    if (option.value === correctAnswer) {
+                        option.parentElement.style.color = 'green';
+                        option.parentElement.style.fontWeight = 'bold';
+                    } else if (option.checked) {
+                        option.parentElement.style.color = 'red';
+                    }
+                });
+                if (selectedAnswer === correctAnswer) score++;
+                document.getElementById('readMore' + i).style.display = 'inline'; // Show "Read More" link after submission
+
+                // Make question bold after answer submission
+                document.getElementById(`question${i}`).classList.add('bold-question');
+            }
+            document.getElementById('result').innerHTML = `You scored ${score} out of ${totalQuestions}.`;
+        }
+
+        // Check unanswered questions
+        function checkUnansweredQuestions() {
+            const unansweredCount = totalQuestions - document.querySelectorAll('input[type="radio"]:checked').length;
+            if (unansweredCount > 0 && !confirm(`You have ${unansweredCount} unanswered question(s). Do you still want to submit?`)) return;
+            submitQuiz();
+        }
+
+        // Shuffle questions on page load
+        shuffleQuestions(questions);
+        displayQuestions();
+    </script>
+</body>
+
+</html>
