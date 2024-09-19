@@ -131,23 +131,23 @@
     <div id="passkeySections">
         <!-- MCQ Passkey Input Section -->
         <div class="input-group" id="questionPasskeySection">
-            <input type="text" class="form-control w-50" id="passkeyInput" maxlength="4" placeholder="Enter 4-digit passkey">
+            <input type="text" class="form-control w-50" id="passkeyInput" maxlength="4" placeholder="Enter 1111 for MCQs">
             <button class="btn btn-success ms-2" id="passkeyButton" onclick="togglePasskeyMode()">Go To MCQs</button>
         </div>
 
         <!-- Answer Passkey Input Section (Initially hidden) -->
         <div class="input-group" id="answerPasskeySection">
-            <input type="text" class="form-control" id="answerPasskeyInput" maxlength="4" placeholder="Enter 4-digit answer passkey">
+            <input type="text" class="form-control" id="answerPasskeyInput" maxlength="4" placeholder="Enter 0000 for Answers">
             <button class="btn btn-warning ms-2" onclick="submitAnswerPasskey()">See Answer</button>
         </div>
     </div>
 
     <!-- Progress bars -->
     <div class="progress mb-2">
-        <div class="progress-bar bg-success" id="timeProgress" style="width: 0%;">time-bar</div>
+        <div class="progress-bar bg-success" id="timeProgress" style="width: 0%;">time bar</div>
     </div>
     <div class="progress mb-2">
-        <div class="progress-bar bg-warning" id="answerProgress" style="width: 0%;">progress-bar</div>
+        <div class="progress-bar bg-warning" id="answerProgress" style="width: 0%;">progress bar</div>
     </div>
 
     <!-- Timer -->
@@ -183,13 +183,13 @@
     question: "नेपालको नागरिक आमाबाट नेपालमा जन्म भई नेपालमा नै बसोबास गरेको व्यक्तिको बाबु विदेशी नागरिक भएमा त्यस्तो व्यक्तिले कुन प्रकारको नागरिकता पाउँदछ?",
     options: ["वंशज", "अंगिकृत", "जन्मसिद्ध", "कुनै पनि प्रकारको नागरिकता पाउदैन"],
     correctAnswer: "b",
-    explanation: "नेपालको कानुन अनुसार बाबु विदेशी भएमा वंशजको नागरिकता पाइँदैन। जन्मसिद्ध नागरिकता प्राप्तिको लागि संवैधानिक व्यवस्था छैन।"
+    explanation: "नेपालको कानुन अनुसार बाबु विदेशी भएमा वंशजको नागरिकता पाइँदैन। जन्मसिद्ध नागरिकता प्राप्तिको लागि संवैधानिक व्यवस्था छैन। त्यस्तो व्यक्तिलाई अंगिकृत नागरिकता दिने सम्बन्धमा  नेपालको संविधानको धारा ११ को उपधारा ७ हेनुहोस्।"
 },
 {
     question: "तलका मध्ये कुन मौलिक हक नेपाली नागरिकका लागि मात्र प्रत्याभूत गरिएको होइन।",
     options: ["समानताको हक", "सूचनाको हक", "न्याय सम्बन्धी हक", "सम्पतिको हक"],
     correctAnswer: "c",
-    explanation: "न्याय सम्बन्धी हक विदेशी नागरिकले पनि प्रयोग गर्न पाउँछन्।"
+    explanation: "न्याय सम्बन्धी हक विदेशी नागरिकले पनि प्रयोग गर्न पाउँछन्। हेर्नुहोस् नेपालको संविधानको धारा २०। त्यहाँ <b>'कुनै पनि व्यक्ति' </b> भन्ने शब्दावली प्रयोग भएको छ। <a href=\'https://docs.google.com/forms/d/e/1FAIpQLScPh43BJYu9yc0vE8ZQ8Varja1GtIzvaeRhWuE8KXegwzoS9w/viewform?usp=pp_url\' target=\'_blank\'>Go for more MCQs</a>"
 },
 {
     question: "तलका मध्ये कुन तरिकाबाट राष्ट्रपति उपरको महाअभियोगको प्रस्ताव पारित भएमा राष्ट्रपति पदमुक्त हुने व्यवस्था छ।",
@@ -251,8 +251,9 @@
     question: "कुन विषयमा रिट क्षेत्राधिकार आकर्षित हुदैन।",
     options: ["मन्त्रिपरिषद्ले गरेको निर्णयमा", "न्याय परिषदले गरेको निर्णयमा", "प्रशासकीय निर्णयमा", "राजनीतिक प्रश्नमा"],
     correctAnswer: "d",
-    explanation: "Doctrine of Political Question को सिद्धान्त अनुसार अदालतले राजनीति प्रश्नमा निर्णय दिन मिल्दैन।"
+    explanation: "Doctrine of Political Question को सिद्धान्त अनुसार अदालतले राजनीति प्रश्नमा निर्णय दिन मिल्दैन। <a href=\'https://docs.google.com/forms/d/e/1FAIpQLScPh43BJYu9yc0vE8ZQ8Varja1GtIzvaeRhWuE8KXegwzoS9w/viewform?usp=pp_url\' target=\'_blank\'>Go for more MCQs</a>"
 },
+
 {
     question: "उच्च अदालतले रिटमा गरेको अन्तिम आदेश उपर थप उपचारका लागि के उपाय अवलम्बन गर्न सकिन्छ।",
     options: [
