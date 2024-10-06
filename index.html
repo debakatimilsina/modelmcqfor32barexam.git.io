@@ -27,11 +27,21 @@
             margin: 0 auto;
             display: flex;
             flex-direction: column-reverse;
+            position: relative;
         }
         .progress-bar-vertical {
             width: 100%;
             height: 0;
             transition: height 0.6s ease;
+        }
+        .progress-bar-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(-90deg);
+            white-space: nowrap;
+            font-size: 12px;
+            color: #333;
         }
         .timer {
             font-size: 16px;
@@ -116,16 +126,21 @@
             50% { opacity: 0; }
         }
     </style>
+    </style>
 </head>
 
 <body>
     <div class="side-bar">
         <div class="progress progress-vertical mb-2">
-            <div class="progress-bar progress-bar-vertical bg-success" id="timeProgress" style="height: 0%;">time-bar</div>
+            <div class="progress-bar progress-bar-vertical bg-success" id="timeProgress" style="height: 0%;">
+                <span class="progress-bar-text">time-bar</span>
+            </div>
         </div>
         <p class="timer" id="timer"><span id="time">00:00</span></p>
         <div class="progress progress-vertical mb-2">
-            <div class="progress-bar progress-bar-vertical bg-warning" id="answerProgress" style="height: 0%;">progress-bar</div>
+            <div class="progress-bar progress-bar-vertical bg-warning" id="answerProgress" style="height: 0%;">
+                <span class="progress-bar-text">progress-bar</span>
+            </div>
         </div>
     </div>
 
@@ -135,11 +150,11 @@
 
         <div id="passkeySections">
             <div class="input-group" id="questionPasskeySection">
-                <input type="text" class="form-control w-50" id="passkeyInput" maxlength="4" placeholder="Enter 1111 for MCQs">
+                <input type="text" class="form-control w-50" id="passkeyInput" maxlength="4" placeholder="Enter 11 & click Go To MCQs">
                 <button class="btn btn-success ms-2" id="passkeyButton" onclick="togglePasskeyMode()">Go To MCQs</button>
             </div>
             <div class="input-group" id="answerPasskeySection">
-                <input type="text" class="form-control" id="answerPasskeyInput" maxlength="4" placeholder="Enter 0000 for Answers">
+                <input type="text" class="form-control" id="answerPasskeyInput" maxlength="4" placeholder="Enter 00 here & click for Answers">
                 <button class="btn btn-warning ms-2" onclick="submitAnswerPasskey()">See Answer</button>
             </div>
         </div>
@@ -328,7 +343,7 @@
 
             if (currentMode === "question") {
                 // Checking the question passkey
-                if (enteredKey === '1111') {
+                if (enteredKey === '11') {
                     document.getElementById('quizForm').classList.remove('d-none');
                     document.getElementById('timer').classList.remove('d-none');
                     startTimer();
@@ -346,7 +361,7 @@
             const enteredKey = document.getElementById('answerPasskeyInput').value;
             document.getElementById('answerPasskeyInput').value = ''; // Clear input field after each submission
 
-            if (enteredKey === '0000') {
+            if (enteredKey === '00') {
                 document.getElementById('result').style.display = 'block'; // Show result after correct answer passkey
                 document.getElementById('answerPasskeySection').style.display = 'none'; // Hide answer passkey section
                 displayAnswers(); // Show answers
