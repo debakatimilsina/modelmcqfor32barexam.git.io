@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCQs with Answers & Tips</title>
+    <title>Online Mock Test</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <style>
@@ -125,7 +125,34 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
-    </style>
+
+        #result a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+#result a:hover {
+    text-decoration: underline;
+}
+
+.blinking-score {
+    font-weight: bold;
+    animation: blink-animation 1s steps(5, start) infinite;
+    -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+@-webkit-keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
     </style>
 </head>
 
@@ -150,11 +177,11 @@
 
         <div id="passkeySections">
             <div class="input-group" id="questionPasskeySection">
-                <input type="text" class="form-control w-50" id="passkeyInput" maxlength="4" placeholder="Enter 11 & click Go To MCQs">
+                <input type="text" class="form-control w-50" id="passkeyInput" maxlength="4" placeholder="Enter 1111 & click Go To MCQs">
                 <button class="btn btn-success ms-2" id="passkeyButton" onclick="togglePasskeyMode()">Go To MCQs</button>
             </div>
             <div class="input-group" id="answerPasskeySection">
-                <input type="text" class="form-control" id="answerPasskeyInput" maxlength="4" placeholder="Enter 00 here & click for Answers">
+                <input type="text" class="form-control" id="answerPasskeyInput" maxlength="4" placeholder="Enter 0000 here & click for Answers">
                 <button class="btn btn-warning ms-2" onclick="submitAnswerPasskey()">See Answer</button>
             </div>
         </div>
@@ -194,7 +221,7 @@
     question: "तलका मध्ये कुन मौलिक हक नेपाली नागरिकका लागि मात्र प्रत्याभूत गरिएको होइन।",
     options: ["समानताको हक", "सूचनाको हक", "न्याय सम्बन्धी हक", "सम्पतिको हक"],
     correctAnswer: "c",
-    explanation: "न्याय सम्बन्धी हक विदेशी नागरिकले पनि प्रयोग गर्न पाउँछन्। हेर्नुहोस् नेपालको संविधानको धारा २०। त्यहाँ <b>'कुनै पनि व्यक्ति' </b> भन्ने शब्दावली प्रयोग भएको छ। <a href=\'https://docs.google.com/forms/d/e/1FAIpQLScPh43BJYu9yc0vE8ZQ8Varja1GtIzvaeRhWuE8KXegwzoS9w/viewform?usp=pp_url\' target=\'_blank\'>Go for more MCQs</a>"
+    explanation: "न्याय सम्बन्धी हक विदेशी नागरिकले पनि प्रयोग गर्न पाउँछन्। हेर्नुहोस् नेपालको संविधानको धारा २०। त्यहाँ <b>'कुनै पनि व्यक्ति' </b> भन्ने शब्दावली प्रयोग भएको छ।"
 },
 {
     question: "तलका मध्ये कुन तरिकाबाट राष्ट्रपति उपरको महाअभियोगको प्रस्ताव पारित भएमा राष्ट्रपति पदमुक्त हुने व्यवस्था छ।",
@@ -256,7 +283,7 @@
     question: "कुन विषयमा रिट क्षेत्राधिकार आकर्षित हुदैन।",
     options: ["मन्त्रिपरिषद्ले गरेको निर्णयमा", "न्याय परिषदले गरेको निर्णयमा", "प्रशासकीय निर्णयमा", "राजनीतिक प्रश्नमा"],
     correctAnswer: "d",
-    explanation: "Doctrine of Political Question को सिद्धान्त अनुसार अदालतले राजनीति प्रश्नमा निर्णय दिन मिल्दैन। <a href=\'https://docs.google.com/forms/d/e/1FAIpQLScPh43BJYu9yc0vE8ZQ8Varja1GtIzvaeRhWuE8KXegwzoS9w/viewform?usp=pp_url\' target=\'_blank\'>Go for more MCQs</a>"
+    explanation: "Doctrine of Political Question को सिद्धान्त अनुसार अदालतले राजनीति प्रश्नमा निर्णय दिन मिल्दैन।"
 },
 
 {
@@ -343,7 +370,7 @@
 
             if (currentMode === "question") {
                 // Checking the question passkey
-                if (enteredKey === '11') {
+                if (enteredKey === '1111') {
                     document.getElementById('quizForm').classList.remove('d-none');
                     document.getElementById('timer').classList.remove('d-none');
                     startTimer();
@@ -361,7 +388,7 @@
             const enteredKey = document.getElementById('answerPasskeyInput').value;
             document.getElementById('answerPasskeyInput').value = ''; // Clear input field after each submission
 
-            if (enteredKey === '00') {
+            if (enteredKey === '0000') {
                 document.getElementById('result').style.display = 'block'; // Show result after correct answer passkey
                 document.getElementById('answerPasskeySection').style.display = 'none'; // Hide answer passkey section
                 displayAnswers(); // Show answers
@@ -411,55 +438,66 @@
         }
 
         // Submit quiz
-        function submitQuiz() {
-            clearInterval(interval); // Stop timer
-            document.getElementById('timer').classList.add('d-none'); // Hide timer after submission
+        // Submit quiz
+function submitQuiz() {
+    clearInterval(interval); // Stop timer
+    document.getElementById('timer').classList.add('d-none'); // Hide timer after submission
 
-            // Hide answers and explanations
-            for (let i = 1; i <= totalQuestions; i++) {
-                document.getElementById('readMore' + i).style.display = 'none';
-            }
+    // Hide answers and explanations
+    for (let i = 1; i <= totalQuestions; i++) {
+        document.getElementById('readMore' + i).style.display = 'none';
+    }
 
-            document.getElementById('submitQuizBtn').style.display = 'none'; // Hide the submit button after quiz submission
+    document.getElementById('submitQuizBtn').style.display = 'none'; // Hide the submit button after quiz submission
 
-            // Disable all radio buttons after submission
-            const allRadioButtons = document.querySelectorAll('input[type="radio"]');
-            allRadioButtons.forEach(button => button.disabled = true);
+    // Disable all radio buttons after submission
+    const allRadioButtons = document.querySelectorAll('input[type="radio"]');
+    allRadioButtons.forEach(button => button.disabled = true);
 
-            // Show the answer passkey section after submission
-            document.getElementById('answerPasskeySection').style.display = 'flex';
-        }
+    // Show the answer passkey section after submission
+    document.getElementById('answerPasskeySection').style.display = 'flex';
+
+    // Scroll to the answer passkey section
+    scrollToAnswerSection();
+}
+
+// New function to handle scrolling
+function scrollToAnswerSection() {
+    const answerSection = document.getElementById('answerPasskeySection');
+    answerSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+// Check unanswered questions
+function checkUnansweredQuestions() {
+    const unansweredCount = totalQuestions - document.querySelectorAll('input[type="radio"]:checked').length;
+    if (unansweredCount > 0 && !confirm(`You have ${unansweredCount} unanswered question(s). Do you still want to submit?`)) return;
+    submitQuiz();
+}
 
         // Display the correct answers
-        function displayAnswers() {
-            let score = 0;
-            for (let i = 1; i <= totalQuestions; i++) {
-                let selectedAnswer = document.querySelector(`input[name="q${i}"]:checked`)?.value;
-                let correctAnswer = questions[i - 1].correctAnswer;
-                document.querySelectorAll(`input[name="q${i}"]`).forEach(option => {
-                    // Make correct answers green and bold
-                    if (option.value === correctAnswer) {
-                        option.parentElement.style.color = 'green';
-                        option.parentElement.style.fontWeight = 'bold';
-                    } else if (option.checked) {
-                        option.parentElement.style.color = 'red';
-                    }
-                });
-                if (selectedAnswer === correctAnswer) score++;
-                document.getElementById('readMore' + i).style.display = 'inline'; // Show "Read More" link after submission
-
-                // Make question bold after answer submission
-                document.getElementById(`question${i}`).classList.add('bold-question');
+       function displayAnswers() {
+    let score = 0;
+    for (let i = 1; i <= totalQuestions; i++) {
+        let selectedAnswer = document.querySelector(`input[name="q${i}"]:checked`)?.value;
+        let correctAnswer = questions[i - 1].correctAnswer;
+        document.querySelectorAll(`input[name="q${i}"]`).forEach(option => {
+            if (option.value === correctAnswer) {
+                option.parentElement.style.color = 'green';
+                option.parentElement.style.fontWeight = 'bold';
+            } else if (option.checked) {
+                option.parentElement.style.color = 'red';
             }
-            document.getElementById('result').innerHTML = `You scored ${score} out of ${totalQuestions}.`;
-        }
-
-        // Check unanswered questions
-        function checkUnansweredQuestions() {
-            const unansweredCount = totalQuestions - document.querySelectorAll('input[type="radio"]:checked').length;
-            if (unansweredCount > 0 && !confirm(`You have ${unansweredCount} unanswered question(s). Do you still want to submit?`)) return;
-            submitQuiz();
-        }
+        });
+        if (selectedAnswer === correctAnswer) score++;
+        document.getElementById('readMore' + i).style.display = 'inline';
+        document.getElementById(`question${i}`).classList.add('bold-question');
+    }
+    document.getElementById('result').innerHTML = `You scored <span class="blinking-score">${score}</span> out of ${totalQuestions}.`;
+    
+    // Add the link at the end of the result
+    const linkElement = document.createElement('p');
+    linkElement.innerHTML = '<a href="https://docs.google.com/forms/d/e/1FAIpQLScPh43BJYu9yc0vE8ZQ8Varja1GtIzvaeRhWuE8KXegwzoS9w/viewform?usp=pp_url" target="_blank"><strong>Go for more MCQs</strong></a>';
+    document.getElementById('result').appendChild(linkElement);
+}
 
         // Shuffle questions on page load
         shuffleQuestions(questions);
