@@ -500,10 +500,9 @@ function checkUnansweredQuestions() {
     document.getElementById('result').innerHTML = `You scored <span class="blinking-score">${score}</span> out of ${totalQuestions}.`;
     
     // Add the link at the end of the result
-    const linkElement = document.createElement('p');
-    linkElement.innerHTML = '<a href="https://docs.google.com/forms/d/e/1FAIpQLScPh43BJYu9yc0vE8ZQ8Varja1GtIzvaeRhWuE8KXegwzoS9w/viewform?usp=pp_url" target="_blank"><strong>Go for more MCQs</strong></a>';
-    document.getElementById('result').appendChild(linkElement);
-}
+const linkElement = document.createElement('p');
+linkElement.innerHTML = '<a href="https://docs.google.com/forms/d/e/1FAIpQLScPh43BJYu9yc0vE8ZQ8Varja1GtIzvaeRhWuE8KXegwzoS9w/viewform?usp=pp_url" target="_blank"><strong><span style="background-color: yellow;">Go for more MCQs</span></strong></a>';
+document.getElementById('result').appendChild(linkElement);
 
         // Shuffle questions on page load
         shuffleQuestions(questions);
