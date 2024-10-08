@@ -354,21 +354,22 @@
             interval;
 
         // Timer function
-        function startTimer() {
-            interval = setInterval(() => {
-                if (timeLeft <= 0) {
-                    clearInterval(interval);
-                    document.getElementById("result").innerHTML = "Time's up!";
-                    submitQuiz();
-                } else {
-                    const minutes = Math.floor(timeLeft / 60),
-                        seconds = timeLeft % 60;
-                    document.getElementById("time").innerHTML = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                    document.getElementById("timeProgress").style.height = `${(totalQuestions * 45 - timeLeft) / (totalQuestions * 45) * 100}%`;
-                }
-                timeLeft -= 1;
-            }, 1000);
+     function startTimer() {
+    interval = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            document.getElementById("result").innerHTML = "Time's up!";
+            submitQuiz();
+        } else {
+            const minutes = Math.floor(timeLeft / 60),
+                seconds = timeLeft % 60;
+            document.getElementById("time").innerHTML = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            // Update this line to make the time-bar descending
+            document.getElementById("timeProgress").style.height = `${timeLeft / (totalQuestions * 45) * 100}%`;
         }
+        timeLeft -= 1;
+    }, 1000);
+}
 
         // Toggle between submit question and answer passkey modes
         function togglePasskeyMode() {
